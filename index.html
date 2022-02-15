@@ -39,12 +39,13 @@
       <!-- boucle for + link + sum -->
       <h2>Panier</h2>
       <ul>
-        <li v-for="item in shoppingCart">
+        <li v-for="item in shoppingCart1">
           <a v-bind:href="item.url">{{ item.label }}</a> : {{ item.cost }} €
         </li>
       </ul>
       <p>Total panier: {{ totalCart }} €</p>
 
+      <h2>v-if</h2>
       <!-- Si (if) l'utilisateur a les autorisations par défaut, afficher ce qui suit -->
       <section v-if="userPermission === 'default'">Utilisation v-if</section>
       <!-- Sinon et si l'utilisateur a les autorisations administrateur, afficher ce qui suit -->
@@ -55,6 +56,7 @@
       <section v-else>Utilisation v-else</section>
 
       <!-- v-show + button (toggle)-->
+      <h2>v-show Toggle</h2>
       <button @click="showModal = !showModal">Display Modal</button>
       <div v-show="showModal" class="modal">Affichage avec v-show</div>
 
@@ -70,12 +72,39 @@
       </div>
 
       <!-- v-model -->
-      <h2>Fomulaire</h2>
+      <h2>Fomulaire et mise à jour des données</h2>
       <label for="username">Nom d'utilisateur</label>
       <input id="username" type="text" v-model="username" />
       <label for="pw">Mot de passe</label>
       <input id="pw" type="password" v-model="password" /> <br />
       Exemple de mise à jour de la data lors de la saisie : {{ username }}
+      <p>
+        ___________________________________________________________________________________________
+      </p>
+      <!-- OpenClassroom Exo -->
+      <h2>Menu OpenClassroom</h2>
+      <div v-for="item in simpleMenu" :key="item.name" class="menu-item">
+        <img :src="item.image.source" :alt="item.image.alt" />
+        <div>
+          <h3>{{ item.name }}</h3>
+          <p v-if="item.inStock">En stock</p>
+          <p v-else>En rupture de stock</p>
+          <div>
+            <label for="add-item-quantity"
+              >Quantité : {{ item.quantity }}</label
+            >
+            <input
+              v-model.number="item.quantity"
+              id="add-item-quantity"
+              type="number"
+            />
+            <button @click="addToShoppingCart(item.quantity)">
+              Ajouter au panier
+            </button>
+          </div>
+        </div>
+      </div>
+      <p>Panier d'achat : {{ shoppingCart }} articles</p>
       <!-- update année -->
       <footer class="footer">
         <h3>{{ copyright }}</h3>
@@ -95,7 +124,7 @@
           costOfCream: 1,
           costOfCroissant: 1.5,
           //test v-for
-          shoppingCart: [
+          shoppingCart1: [
             {
               label: "Apple",
               cost: 10,
@@ -120,6 +149,37 @@
           //v-model
           username: "",
           password: "",
+          //exo OC
+          shoppingCart: 0,
+          simpleMenu: [
+            {
+              name: "Croissant",
+              image: {
+                source: "https://picsum.photos/200",
+                alt: "Un croissant",
+              },
+              inStock: true,
+              quantity: 1,
+            },
+            {
+              name: "Baguette de pain",
+              image: {
+                source: "https://picsum.photos/200",
+                alt: "Quatre baguettes de pain",
+              },
+              inStock: true,
+              quantity: 1,
+            },
+            {
+              name: "Éclair",
+              image: {
+                source: "https://picsum.photos/200",
+                alt: "Éclair au chocolat",
+              },
+              inStock: false,
+              quantity: 1,
+            },
+          ],
         },
         computed: {
           //test update date
@@ -136,7 +196,7 @@
           totalCart() {
             let total = 0;
 
-            this.shoppingCart.forEach((item) => {
+            this.shoppingCart1.forEach((item) => {
               total += item.cost;
             });
             return total;
@@ -150,6 +210,10 @@
           //@click + @keyup.enter en récupérant la valeur saisie par l'ID
           changeColor() {
             this.favoriteColor = document.getElementById("change-color").value;
+          },
+          //exo OC
+          addToShoppingCart(amount) {
+            this.shoppingCart += amount;
           },
         },
       });
