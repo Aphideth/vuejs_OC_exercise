@@ -27,7 +27,8 @@
         <li>Dimanche: 07:00 à 12:00</li>
       </ul>
 
-      <p>Exemple de prix</p>
+      <!-- sum -->
+      <h2>Exemple de prix</h2>
       <ul>
         <li>Café: {{ costOfCoffee }} €</li>
         <li>Crème: {{ costOfCream }} €</li>
@@ -35,8 +36,17 @@
       </ul>
       <p>Total: {{ totalAmount }} €</p>
 
+      <!-- boucle for + link + sum -->
+      <h2>Panier</h2>
+      <ul>
+        <li v-for="item in shoppingCart">
+          <a v-bind:href="item.url">{{ item.label }}</a> : {{ item.cost }} €
+        </li>
+      </ul>
+      <p>Total panier: {{ totalCart }} €</p>
+
       <footer class="footer">
-        <p>{{ copyright }}</p>
+        <h3>{{ copyright }}</h3>
       </footer>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
@@ -48,18 +58,48 @@
           adress: "18 avenue du Beurre, Paris, France",
           phoneNumber: "01 88 88 88 88",
           email: "hello@cafewithavue.bakery",
+          // test sum
           costOfCoffee: 3,
           costOfCream: 1,
           costOfCroissant: 1.5,
+          //test v-for
+          shoppingCart: [
+            {
+              label: "Apple",
+              cost: 10,
+              url: "/apples.html",
+            },
+            {
+              label: "Banana",
+              cost: 23,
+              url: "/banana.html",
+            },
+            {
+              label: "Coconut",
+              cost: 15,
+              url: "/coconut.html",
+            },
+          ],
         },
         computed: {
+          //test update date
           copyright() {
             const currentYear = new Date().getFullYear();
 
             return `Copyright ${this.restaurantName} ${currentYear}`;
           },
+          //test sum
           totalAmount() {
             return this.costOfCoffee + this.costOfCream + this.costOfCroissant;
+          },
+          //test v-for
+          totalCart() {
+            let total = 0;
+
+            this.shoppingCart.forEach((item) => {
+              total += item.cost;
+            });
+            return total;
           },
         },
       });
